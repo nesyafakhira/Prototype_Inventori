@@ -7,8 +7,9 @@ $halamanAktif = $halamanAktif ?? '';
 $flash = ambil_flash();
 
 $menuNavigasi = [
-    'barang'       => ['label' => 'Daftar Barang', 'url' => 'index.php'],
-    'barang_masuk' => ['label' => 'Barang Masuk', 'url' => 'barang_masuk.php'],
+    'barang'        => ['label' => 'Daftar Barang', 'url' => 'index.php'],
+    'barang_masuk'  => ['label' => 'Barang Masuk', 'url' => 'barang_masuk.php'],
+    'barang_keluar' => ['label' => 'Barang Keluar', 'url' => 'barang_keluar.php'],
 ];
 ?>
 

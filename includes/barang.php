@@ -79,3 +79,40 @@ function tambah_stok_barang(mysqli $koneksi, string $kodeBarang, int $jumlah): v
         throw new RuntimeException('Stok barang ' . $kodeBarang . ' gagal diperbarui.');
     }
 }
+
+function ambil_stok_untuk_diperbarui(mysqli $koneksi, string $kodeBarang): ?array
+{
+    $statement = mysqli_prepare(
+        $koneksi,
+        'SELECT jumlah_stok, stok_minimum FROM data_barang WHERE kode_barang = ? FOR UPDATE'
+    );
+    mysqli_stmt_bind_param($statement, 's', $kodeBarang);
+    mysqli_stmt_execute($statement);
+    $baris = mysqli_fetch_assoc(mysqli_stmt_get_result($statement));
+    mysqli_stmt_close($statement);
+
+    if ($baris === null) {
+        return null;
+    }
+
+    return [
+        'jumlah_stok'  => (int) $baris['jumlah_stok'],
+        'stok_minimum' => (int) $baris['stok_minimum'],
+    ];
+}
+
+function kurangi_stok_barang(mysqli $koneksi, string $kodeBarang, int $jumlah): void
+{
+    $statement = mysqli_prepare(
+        $koneksi,
+        'UPDATE data_barang SET jumlah_stok = jumlah_stok - ? WHERE kode_barang = ? AND jumlah_stok >= ?'
+    );
+    mysqli_stmt_bind_param($statement, 'isi', $jumlah, $kodeBarang, $jumlah);
+    mysqli_stmt_execute($statement);
+    $barisTerubah = mysqli_stmt_affected_rows($statement);
+    mysqli_stmt_close($statement);
+
+    if ($barisTerubah !== 1) {
+        throw new RuntimeException('Stok barang ' . $kodeBarang . ' gagal dikurangi.');
+    }
+}
