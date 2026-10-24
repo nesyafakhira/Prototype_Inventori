@@ -1,0 +1,14 @@
+body {
+    background-color: #f5f7fa;
+}
+
+.kartu-ringkasan .angka {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.kolom-angka {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
