@@ -4,9 +4,11 @@ require_once __DIR__ . '/fungsi.php';
 
 $judulHalaman = $judulHalaman ?? 'Inventori Gudang';
 $halamanAktif = $halamanAktif ?? '';
+$flash = ambil_flash();
 
 $menuNavigasi = [
-    'barang' => ['label' => 'Daftar Barang', 'url' => 'index.php'],
+    'barang'       => ['label' => 'Daftar Barang', 'url' => 'index.php'],
+    'barang_masuk' => ['label' => 'Barang Masuk', 'url' => 'barang_masuk.php'],
 ];
 ?>
 
@@ -41,3 +43,9 @@ $menuNavigasi = [
     </div>
 </nav>
 <main class="container py-4 flex-grow-1">
+    <?php if ($flash !== null): ?>
+        <div class="alert alert-<?= e($flash['tipe']) ?> alert-dismissible fade show" role="alert">
+            <?= e($flash['pesan']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+        </div>
+    <?php endif; ?>

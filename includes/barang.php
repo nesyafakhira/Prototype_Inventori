@@ -54,3 +54,28 @@ function hitung_ringkasan_stok(mysqli $koneksi): array
         'stok_habis'   => (int) $baris['stok_habis'],
     ];
 }
+
+function barang_terdaftar(mysqli $koneksi, string $kodeBarang): bool
+{
+    $statement = mysqli_prepare($koneksi, 'SELECT 1 FROM data_barang WHERE kode_barang = ? LIMIT 1');
+    mysqli_stmt_bind_param($statement, 's', $kodeBarang);
+    mysqli_stmt_execute($statement);
+    mysqli_stmt_store_result($statement);
+    $terdaftar = mysqli_stmt_num_rows($statement) === 1;
+    mysqli_stmt_close($statement);
+
+    return $terdaftar;
+}
+
+function tambah_stok_barang(mysqli $koneksi, string $kodeBarang, int $jumlah): void
+{
+    $statement = mysqli_prepare($koneksi, 'UPDATE data_barang SET jumlah_stok = jumlah_stok + ? WHERE kode_barang = ?');
+    mysqli_stmt_bind_param($statement, 'is', $jumlah, $kodeBarang);
+    mysqli_stmt_execute($statement);
+    $barisTerubah = mysqli_stmt_affected_rows($statement);
+    mysqli_stmt_close($statement);
+
+    if ($barisTerubah !== 1) {
+        throw new RuntimeException('Stok barang ' . $kodeBarang . ' gagal diperbarui.');
+    }
+}
